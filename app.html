@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>web snapshot</title>
+
+	    <!-- Importing Materialize CSS and Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <!-- Importing custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+	<nav>
+		<div class="nav-wrapper blue darken-4">
+			<div class="row">
+				<div class="col s12">
+					<a href="/" class="brand-logo center">web snapshot</a>
+					<!-- <i class="material-icons dropdown-trigger right" data-target='dropdown1'>more_horiz</i> -->
+				  	<!-- <ul id='dropdown1' class='dropdown-content'>
+				  		<li class="seen-if-not-logged"><a href="/login" class="black-text">Login</a></li>
+					    <li class="seen-if-logged"><a href="/auth/logout" class="black-text">Logout</a></li>
+					    <li><a href="https://github.com/matikka96" class="black-text">Github</a></li>
+				  	</ul> -->
+				</div>
+			</div>
+		</div>
+	</nav>
+	<br>
+	<div class="container">
+
+		<div id="row">
+			<div class="input-field row">
+	      <input placeholder="paste address here..." id="url-field" type="text" class="validate">
+	    </div>
+			<!-- <a class="waves-effect waves-light btn" onclick="create()">create</a> -->
+		</div>
+		
+		<!-- Buttons -->
+		<div class="menu">
+			<a class="waves-effect waves-light btn" onclick="create()">
+				<i class="material-icons left" onclick="create()">send</i>Create
+			</a>
+			<a class="waves-effect waves-light btn" href="#" id="button-download">
+				<i class="material-icons left">file_download</i>download
+			</a>
+		</div>
+
+		<div class="row">
+			<ul class="collapsible col s12">
+			  <li>
+			    <div class="collapsible-header">
+			      <i class="material-icons">settings</i>Advanced settings
+			    </div>
+			    <div class="collapsible-body">
+			    	<!-- <p>Page pixel width: </p> -->
+			    	<form action="#">
+					    <p class="range-field" onchange="optionsScreenSizeWidth()">
+					    	<label>Page pixel width: </label>
+					      <input type="range" id="shot-size-width" min="300" max="2000" value="1024" />
+					    </p>
+					  </form>
+			    </div>
+			  </li>
+			</ul>
+		</div>
+		
+	<div class="preloader-wrapper big active" id="load-progress">
+    <div class="spinner-layer spinner-blue-only">
+      <div class="circle-clipper left">
+        <div class="circle"></div>
+      </div><div class="gap-patch">
+        <div class="circle"></div>
+      </div><div class="circle-clipper right">
+        <div class="circle"></div>
+      </div>
+    </div>
+  </div>
+
+		<div id="loaded-image">
+			<p id="result-url">url</p>
+			<img src="#" alt="snapshot" id="snap-shot" class="responsive-img z-depth-4">
+		</div>
+	</div>
+
+	<!-- Materialize initializatin -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script>
+      $(document).ready(function(){
+      	$('.collapsible').collapsible();
+      	$('select').formSelect();
+      });
+  </script>
+	
+	<!-- Import Axios -->
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+	<script>
+
+	width = 1024;
+
+		function optionsScreenSizeWidth() {
+			width = parseInt(document.getElementById('shot-size-width').value, 10);
+		}
+
+		function optionsSteamType() {
+		    let selected = document.getElementById("input-streamType").value;
+		    options.streamType = selected;
+		}
+
+		function create() {
+			console.log('function triggered');
+			let progress = document.getElementById('load-progress');
+			progress.style.display = 'block';
+			let urlInput = document.getElementById('url-field').value;
+			console.log('Input url: '+urlInput);
+			axios.post('/create', {url : urlInput, screenWidth : width}).then((response) => {
+				console.log(response.data);
+				progress.style.display = 'none';
+				if (response.data === 'error') {
+					M.toast({html: 'Could not process URL'});
+					console.log('Could not process URL');
+				} else {
+					document.getElementById('snap-shot').src = response.data;
+					document.getElementById('button-download').href = response.data;
+					document.getElementById('result-url').innerHTML = response.data;
+					document.getElementById('loaded-image').style.display = 'block';
+				}
+			}).catch((err) => {
+				console.log(err);
+			});
+		}
+	</script>
+</body>
+</html>
