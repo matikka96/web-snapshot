@@ -1,42 +1,18 @@
 const bodyParser = require('body-parser');
-
-// Webshot Setup
-// const webshot = require('webshot');
-// Routes
-// app.get('/', (req, res) => {
-// 	res.sendFile(__dirname + '/app.html');
-// });
-
-// app.post('/create', (req, res) => {
-// 	let options = req.body.optionsFromSite;
-// 	let address = req.body.url;
-// 	let fileLocation = './media/'+Date.now()+'.jpg';
-// 	webshot(address, fileLocation, options, (err) => {
-// 	  if (err) {
-// 	  	console.log(err);
-// 	  	res.send('error');
-// 	  } else {
-// 	  	res.send(fileLocation);
-// 	  }
-// 	});
-
-// });
-
 const puppeteer = require('puppeteer');
 
 // Express setup
 const express = require('express');
 const app = express();
 app.use(express.static(__dirname + '/'));
-app.use( bodyParser.json() );
+app.use(bodyParser.json());
 
 
 app.get('/', (req, res) => {
-	res.sendFile(__dirname + '/app.html');
+	res.sendFile(__dirname + '/index.html');
 });
 
 app.post('/create', (req, res) => {
-	// let options = req.body.optionsFromSite;
 
 	let address = req.body.url;
 
@@ -66,7 +42,7 @@ app.post('/create', (req, res) => {
 
 });
 
-// Listening to port 3000
-app.listen(3000, () => {
-	console.log('Listening on port 3000');
+// Listening to port 3001
+app.listen(3100, () => {
+	console.log('Listening on port 3100');
 });
