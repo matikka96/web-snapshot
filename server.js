@@ -37,12 +37,13 @@ app.post('/create', (req, res) => {
 		res.send(optionsScreenshot.path);
 	}).catch((err) => {
 		console.log(err);
-		res.send('error');
+		res.send(err);
 	});
 
 });
 
-// Listening to port 3001
-app.listen(3100, () => {
-	console.log('Listening on port 3100');
+// Listening to port 3100
+const PORT = process.env.PORT || 3100;
+app.listen(PORT, () => {
+	console.log(`Listening on port ${PORT}`);
 });
